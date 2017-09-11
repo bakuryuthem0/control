@@ -1,0 +1,3 @@
+<?php foreach($values as $v): ?>
+	<option value="<?php echo $v->id; ?>" class="option-response" <?php if(isset($old) && $old == $v->id): ?> selected <?php endif; ?>><?php echo $v->value; ?></option>
+<?php endforeach; ?>

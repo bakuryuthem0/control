@@ -1,0 +1,74 @@
+<?php $__env->startSection('content'); ?>
+
+<div class="row">
+	<div class="col-xs-12 col-sm-11 center-block">
+		<div class="panel panel-default login-panel">
+			<div class="panel-heading">
+				<h3 class="text-center">Ver Horarios</h3>
+			</div>
+			<div class="panel-body">
+				<?php if(Session::has('success')): ?>
+				<div class="alert alert-success">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					<?php echo Session::get('success'); ?>
+
+				</div>
+				<?php endif; ?>
+				<?php if(Session::has('danger')): ?>
+				<div class="alert alert-danger">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					<?php echo Session::get('danger'); ?>
+
+				</div>
+				<?php endif; ?>
+				<div class="col-xs-12 col-md-4 pull-right">
+					<div class="input-group">
+						<input type="text" class="form-control" name="busq" placeholder="Busqueda">
+					    <span class="input-group-btn">
+					        <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+					    </span>
+					</div><!-- /input-group -->
+				</div>
+				<div class="clearfix"></div>
+				<div class="table-responsive">
+					<table class="table table-striped table-hover">
+						<thead>
+							<tr>
+								<th>Id</th>
+								<th>Curso</th>
+								<th>Dia</th>
+								<th>Horario</th>
+								<th>Sección</th>
+								<th>Salón</th>
+								<th>Modificar</th>
+								<th>Eliminar</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach($schedules as $s): ?>
+							<tr>
+								<td><?php echo $s->id; ?></td>
+								<td><?php echo $s->courses->name; ?></td>
+								<td><?php echo $s->days->name; ?></td>
+								<td><strong>Inicio: </strong><?php echo $s->start_at; ?> - <strong>Fin: </strong><?php echo $s->end_at; ?></td>
+								<td><?php echo $s->group; ?></td>
+								<td><?php echo $s->location; ?></td>
+								<td><a target="_blank" href="<?php echo URL::to('administrador/ver-horarios/'.$s->id); ?>" class="btn btn-xs btn-warning">Modificar</a></td>
+								<td><button class="btn btn-xs btn-danger btn-elim-schedule" data-toggle="modal" data-target="#modalElim" data-url="<?php echo URL::to('administrador/ver-horarios/eliminar'); ?>" value="<?php echo $s->id; ?>" data-tosend="id">Eliminar</button></td>
+							</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php echo View::make('partials.modalElim'); ?>
+
+<?php echo Form::token(); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

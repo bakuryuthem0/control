@@ -1,0 +1,103 @@
+<?php $__env->startSection('content'); ?>
+	<div class="">
+		<div class="col-xs-12">
+			<h2 class="text-center"></h2>
+		</div>
+		<div class="clearfix"></div>
+		<div class="col-xs-12 col-sm-8 center-block">
+			<div class="panel panel-default login-panel">
+				<div class="panel-heading">
+					<h3 class="text-center">Modificar Asignación</h3>
+				</div>
+				<div class="panel-body">
+					<?php if(count($errors->getMessageBag()) > 0): ?>
+					<div class="alert alert-danger">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+							<?php foreach($errors->all() as $err): ?>
+			                    <li><?php echo $err; ?></li>
+			                <?php endforeach; ?>
+						</ul>
+					</div>
+					<?php endif; ?>
+					<?php if(Session::has('success')): ?>
+					<div class="alert alert-success">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<?php echo Session::get('success'); ?>
+
+					</div>
+					<?php endif; ?>
+					<form method="POST" action="<?php echo URL::to('administrador/ver-asignaciones/'.$assignment->id.'/enviar'); ?>">
+						<div class="input-field">
+							<label>Carrera (*)</label>
+						  	<select name="carreer" class="form-control validate-input carreers" data-url="<?php echo URL::to('administrador/cargar-cursos'); ?>" data-target=".enrollment-course">
+						  		<option value="">Seleccione una opción...</option>
+						  		<?php foreach($carreers as $c): ?>
+						  			<option value="<?php echo $c->id; ?>" <?php if($assignment->schedule->courses->carreer_id == $c->id): ?> selected <?php endif; ?> class="option-response"><?php echo $c->code; ?> - <?php echo $c->name; ?></option>
+						  		<?php endforeach; ?>
+						  	</select>
+						</div>
+						<div class="input-field">
+							<label>Curso (*)</label>
+						  	<select name="course" class="form-control validate-input enrollment-course" data-url="<?php echo URL::to('administrador/cargar-horarios'); ?>" data-target=".schedule">
+						  		<option value="">Seleccione una opción...</option>
+						  		<option value="<?php echo $assignment->schedule->course_id; ?>" selected class="option-response"></option>
+						  	</select>
+						</div>
+						<div class="input-field">
+							<label>Horario (*)</label>
+						  	<select name="schedule" class="form-control validate-input schedule">
+						  		<option value="">Seleccione una opción...</option>
+						  		<option value="<?php echo $assignment->schedule_id; ?>" selected class="option-response"></option>
+						  	</select>
+						</div>
+					  	<script type="text/javascript">
+						  	jQuery(document).ready(function($) {
+					  			if($('.schedule').val() != "")
+					  			{
+					  				loadCarreers($('.enrollment-course'), $('.schedule').val());
+					  			}else
+					  			{
+					  				loadCarreers($('.enrollment-course'));
+					  			}
+						  		if($('.enrollment-course').val() != "")
+					  			{
+					  				loadCarreers($('.carreers'), $('.enrollment-course').val());
+					  			}else
+					  			{
+					  				loadCarreers($('.carreers'));
+					  			}
+					  		});
+					  	</script>
+						<div class="input-field">
+							<label>Profesor (*)</label>
+							<select name="professor" class="form-control validate-input">
+						  		<option value="">Seleccione una opción...</option>
+								<?php foreach($professors as $p): ?>
+									<option value="<?php echo $p->id; ?>" <?php if($assignment->user_id == $p->id): ?> selected <?php endif; ?>>
+										<?php if($p->info): ?>
+											<?php echo $p->info->full_name; ?>
+
+										<?php else: ?>
+											<?php echo $p->username; ?>
+
+										<?php endif; ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+						<div class="input-field">
+							<h3>Semestre: <strong><?php echo strtoupper($semester->code); ?></strong></h3>
+						</div>
+						<?php echo Form::token(); ?>
+
+					</form>
+					<div class="input-field">
+						<button class="btn btn-success pull-right btn-submit">Enviar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

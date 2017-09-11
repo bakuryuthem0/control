@@ -1,0 +1,100 @@
+<?php $__env->startSection('content'); ?>
+	<div class="row">
+		<div class="col-xs-12 col-sm-8 col-md-6 center-block">
+			<div class="panel panel-default login-panel">
+				<div class="panel-heading">
+					<h3 class="text-center">Nuevo Curso</h3>
+				</div>
+				<div class="panel-body">
+					<?php if(count($errors->getMessageBag()) > 0): ?>
+					<div class="alert alert-danger">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<?php foreach($errors->getMessageBag()->get('carreer') as $e): ?>
+								<li><?php echo $e; ?></li>
+							<?php endforeach; ?>
+							<?php foreach($errors->getMessageBag()->get('code') as $e): ?>
+								<li><?php echo $e; ?></li>
+							<?php endforeach; ?>
+							<?php foreach($errors->getMessageBag()->get('name') as $e): ?>
+								<li><?php echo $e; ?></li>
+							<?php endforeach; ?>
+							<?php foreach($errors->getMessageBag()->get('description') as $e): ?>
+								<li><?php echo $e; ?></li>
+							<?php endforeach; ?>
+							<?php foreach($errors->getMessageBag()->get('credit_units') as $e): ?>
+								<li><?php echo $e; ?></li>
+							<?php endforeach; ?>
+							<?php foreach($errors->getMessageBag()->get('semester') as $e): ?>
+								<li><?php echo $e; ?></li>
+							<?php endforeach; ?>
+							<?php foreach($errors->getMessageBag()->get('prelated_by') as $e): ?>
+								<li><?php echo $e; ?></li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+					<?php endif; ?>
+					<?php if(Session::has('success')): ?>
+					<div class="alert alert-success">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<?php echo Session::get('success'); ?>
+
+					</div>
+					<?php endif; ?>
+					
+					<form method="POST" action="<?php echo URL::to('administrador/modificar-curso/'.$course->id.'/enviar'); ?>">
+						<div class="input-field">
+							<label>Carrera (*)</label>
+						  	<select name="carreer" class="form-control validate-input carreers" data-url="<?php echo URL::to('administrador/cargar-cursos'); ?>" data-target=".prelated_by">
+						  		<option value="">Seleccione una opción...</option>
+						  		<?php foreach($carreers as $c): ?>
+						  			<option value="<?php echo $c->id; ?>" <?php if($course->carreer_id == $c->id): ?> selected <?php endif; ?>><?php echo $c->code; ?> - <?php echo $c->name; ?></option>
+						  		<?php endforeach; ?>
+						  	</select>
+						</div>
+						<div class="input-field">
+							<label>Prelada Por (Opcional)</label>
+						  	<select name="prelated_by" class="form-control prelated_by">
+						  		<option value="">...</option>
+						  		<?php if($course->prelated_by != 0): ?>
+						  			<option value="<?php echo $course->prelated_by; ?>" class="option-response" selected><?php echo $course->prelated->name; ?></option>
+						  		<?php endif; ?>
+						  	</select>
+						  	<script type="text/javascript">
+						  		jQuery(document).ready(function($) {
+						  			loadCarreers($('.carreers'), $('.prelated_by').val());
+						  		});
+						  	</script>
+						</div>
+						<div class="input-field">
+							<label>Codígo (*)</label>
+						  	<input type="text" name="code" class="form-control validate-input" placeholder="Codígo" value="<?php echo $course->code; ?>">
+						</div>
+						<div class="input-field">
+							<label>Nombre (*)</label>
+						  	<input type="text" name="name" class="form-control validate-input" placeholder="Nombre" value="<?php echo $course->name; ?>">
+						</div>
+						<div class="input-field">
+							<label>Descripción (*)</label>
+						  	<input type="text" name="description" class="form-control validate-input" placeholder="Descripción" value="<?php echo $course->description; ?>">
+						</div>
+						<div class="input-field">
+							<label>Unidades de credito (*)</label>
+						  	<input type="text" name="credit_units" class="form-control validate-input" placeholder="Unidades de credito" value="<?php echo $course->credit_units; ?>">
+						</div>
+					  	<div class="input-field">
+							<label>Semestre de ubicación (*)</label>
+						  	<input type="text" name="semester" class="form-control validate-input" placeholder="Semestre de ubicación" value="<?php echo $course->semester; ?>">
+						</div>
+						<?php echo Form::token(); ?>
+
+					</form>
+					<div class="input-field">
+						<button class="btn btn-success pull-right btn-submit">Enviar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
